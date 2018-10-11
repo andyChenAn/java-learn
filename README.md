@@ -6,3 +6,6 @@
   - [synchronized关键字](https://github.com/andyChenAn/java-study/tree/master/thread/synchronized/)
   - [实例锁和全局锁](https://github.com/andyChenAn/java-study/tree/master/thread/instanceLockAndGlobalLock/)
   - [线程等待与唤醒](https://github.com/andyChenAn/java-study/tree/master/thread/waitAndNotifyThread/)
+  - [线程让步](https://github.com/andyChenAn/java-study/tree/master/thread/yieldThread/)
+  - [线程休眠](https://github.com/andyChenAn/java-study/tree/master/thread/sleepThread/)
+  - [线程join方法](https://github.com/andyChenAn/java-study/tree/master/thread/joinThread/)
