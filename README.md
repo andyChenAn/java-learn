@@ -9,3 +9,7 @@
   - [线程让步](https://github.com/andyChenAn/java-study/tree/master/thread/yieldThread/)
   - [线程休眠](https://github.com/andyChenAn/java-study/tree/master/thread/sleepThread/)
   - [线程join方法](https://github.com/andyChenAn/java-study/tree/master/thread/joinThread/)
+  - [中断线程](https://github.com/andyChenAn/java-study/tree/master/thread/interruptThread/)
+  - [守护线程](https://github.com/andyChenAn/java-study/tree/master/thread/daemonThread/)
+  - [线程优先级](https://github.com/andyChenAn/java-study/tree/master/thread/priorityThread/)
+  - [生产消费模型](https://github.com/andyChenAn/java-study/tree/master/thread/produceAndCustomerThread/)
