@@ -13,3 +13,4 @@
   - [守护线程](https://github.com/andyChenAn/java-study/tree/master/thread/daemonThread/)
   - [线程优先级](https://github.com/andyChenAn/java-study/tree/master/thread/priorityThread/)
   - [生产消费模型](https://github.com/andyChenAn/java-study/tree/master/thread/produceAndCustomerThread/)
+- [对象序列化](https://github.com/andyChenAn/java-study/tree/master/serialize/)
