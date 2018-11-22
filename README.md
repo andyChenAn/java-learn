@@ -15,3 +15,4 @@
   - [生产消费模型](https://github.com/andyChenAn/java-study/tree/master/thread/produceAndCustomerThread/)
 - [对象序列化](https://github.com/andyChenAn/java-study/tree/master/serialize/)
 - [java类型信息](https://github.com/andyChenAn/java-study/tree/master/type/)
+- [java泛型](https://github.com/andyChenAn/java-study/tree/master/generic/)
