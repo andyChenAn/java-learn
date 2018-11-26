@@ -39,11 +39,16 @@ public class GrabJobInfo extends Thread {
 						map.put("jobAge" , m.group(3));
 					}
 					JobData.put(pageUrl , map);
+					System.out.println(JobData.jobData);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			} else {
-				break;
+				try {
+					Thread.sleep(300);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

@@ -45,7 +45,11 @@ public class GrabJob extends Thread {
 					e.printStackTrace();
 				}
 			} else {
-				break;
+				try {
+					Thread.sleep(300);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
