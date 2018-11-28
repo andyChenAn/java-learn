@@ -90,3 +90,82 @@ public class Test5 {
 	}
 }
 ```
+### 可变数组
+当我们创建一个数组的时候，数组的长度是不可改变的。但是有什么方法可以让我们的数组的长度变成可变呢？其实我们可以模拟，比如：
+
+```java
+package study;
+
+import java.util.Arrays;
+
+public class ArrayUtils {
+	static <T> T[] expandCapacity (T[] data , int newLen) {
+		if (newLen > 0) {
+			newLen = newLen + data.length;
+		} else {
+			newLen = data.length;
+		}
+		return Arrays.copyOf(data , newLen);
+	}
+}
+```
+上面我们定义了一个方法，用来对数据进行扩容。测试如下：
+
+```java
+package study;
+
+import java.util.Arrays;
+
+public class ArrayUtilsTest {
+	public static void main (String[] args) {
+		Integer[] a = {1 , 2 , 3 , 4 , 5};
+		System.out.println(Arrays.toString(a));
+		a = ArrayUtils.expandCapacity(a , 10);
+		a[6] = 6;
+		a[5] = 5;
+		System.out.println(Arrays.toString(a));
+	}
+}
+
+```
+结果为：
+
+```
+[1, 2, 3, 4, 5]
+[1, 2, 3, 4, 5, 5, 6, null, null, null, null, null, null, null, null]
+```
+### 数组转换成列表注意点
+
+```java
+package study;
+
+import java.util.*;
+
+public class Test3 {
+	public static void main (String[] args) {
+		int[] a = {1 , 2 , 3 , 4 , 5};
+		List list = Arrays.asList(a);
+		System.out.println(list.size());
+	}
+}
+```
+打印的结果为：
+
+```
+1
+```
+上面代码中，当数组转为列表时，基本类型是不能被泛化的，而编辑器不会报错是因为，编辑器把数组看做是一个对象，所以打印出来的长度是1，我们只需要将int基本类型换成Integer即可。
+
+```java
+package study;
+
+import java.util.*;
+
+public class Test3 {
+	public static void main (String[] args) {
+		Integer[] a = {1 , 2 , 3 , 4 , 5};
+		List list = Arrays.asList(a);
+		System.out.println(list.size());
+	}
+}
+```
