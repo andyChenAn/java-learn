@@ -18,5 +18,6 @@
 - [java泛型](https://github.com/andyChenAn/java-study/tree/master/generic/)
 - [java数组](https://github.com/andyChenAn/java-study/tree/master/array/)
 - [java集合](https://github.com/andyChenAn/java-study/tree/master/collections/)
+  - [ArrayList](https://github.com/andyChenAn/java-study/tree/master/collections/arrayList/)
 ## 例子
 - [java小爬虫例子](https://github.com/andyChenAn/java-learn/tree/master/java小爬虫例子/src/com/andy)
