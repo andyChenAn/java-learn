@@ -17,5 +17,6 @@
 - [java类型信息](https://github.com/andyChenAn/java-study/tree/master/type/)
 - [java泛型](https://github.com/andyChenAn/java-study/tree/master/generic/)
 - [java数组](https://github.com/andyChenAn/java-study/tree/master/array/)
+- [java集合](https://github.com/andyChenAn/java-study/tree/master/collections/)
 ## 例子
 - [java小爬虫例子](https://github.com/andyChenAn/java-learn/tree/master/java小爬虫例子/src/com/andy)
