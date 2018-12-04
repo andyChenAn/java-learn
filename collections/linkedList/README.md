@@ -174,7 +174,7 @@ void linkLast(E e) {
 该方法用于清空链表所有元素。来看一下源码是怎么写的？
 
 ```java
-// 从头变量链表中的
+// 从头遍历链表中的每一个元素，将所有的元素赋值为null，并且更新size的值为0
 public void clear() {
     for (Node<E> x = first; x != null; ) {
         Node<E> next = x.next;
@@ -188,3 +188,246 @@ public void clear() {
     modCount++;
 }
 ```
+### clone方法
+该方法用于克隆链表，返回一个链表副本。
+
+```java
+// 克隆链表，返回一个副本
+public Object clone() {
+    LinkedList<E> clone = superClone();
+
+    // Put clone into "virgin" state
+    // 将副本设置为初始状态
+    clone.first = clone.last = null;
+    clone.size = 0;
+    clone.modCount = 0;
+
+    // Initialize clone with our elements
+    // 将链表中的元素添加到副本中
+    for (Node<E> x = first; x != null; x = x.next)
+        clone.add(x.item);
+
+    return clone;
+}
+```
+### contains(Object o)方法
+该方法用于表示集合中是否包含指定的元素，返回一个布尔值。
+
+```java
+// 内部调用indexOf()方法，来查找指定元素的下标，如果找到就返回该元素的下标，否则返回-1
+public boolean contains(Object o) {
+    return indexOf(o) != -1;
+}
+
+// 查找元素的下标位置
+public int indexOf(Object o) {
+    // 初始值为0，没遍历一次，加1。
+    int index = 0;
+    // 如果查找的元素是null，那么就返回元素为null的下标
+    // 如果查找的元素不为null，那么就遍历链表，直到找到该元素
+    // 如果没有找到该元素，那么就返回-1。
+    if (o == null) {
+        for (Node<E> x = first; x != null; x = x.next) {
+            if (x.item == null)
+                return index;
+            index++;
+        }
+    } else {
+        for (Node<E> x = first; x != null; x = x.next) {
+            if (o.equals(x.item))
+                return index;
+            index++;
+        }
+    }
+    return -1;
+}
+```
+### element方法
+该方法用于获取链表中的第一个元素。
+
+```java
+public E element() {
+    return getFirst();
+}
+
+public E getFirst() {
+    // 这里其实就是获取第一个节点的元素
+    final Node<E> f = first;
+    if (f == null)
+        throw new NoSuchElementException();
+    return f.item;
+}
+```
+### get(int index)方法
+该方法用于获取链表中的指定的元素。
+
+```java
+public E get(int index) {
+    // 检查角标是否越界
+    checkElementIndex(index);
+    return node(index).item;
+}
+
+// 获取链表中指定的index下的节点
+// 如果index的值大于size的一半，那么就从后往前遍历，否则就从前往后遍历，直到找到index对应的节点
+Node<E> node(int index) {
+    // assert isElementIndex(index);
+
+    if (index < (size >> 1)) {
+        Node<E> x = first;
+        for (int i = 0; i < index; i++)
+            x = x.next;
+        return x;
+    } else {
+        Node<E> x = last;
+        for (int i = size - 1; i > index; i--)
+            x = x.prev;
+        return x;
+    }
+}
+```
+### getFirst方法
+该方法用于获取链表中的第一个元素。
+### getLast方法
+该方法用于获取链表中的最后一个元素。
+### indexOf(Object o)方法
+该方法用于查找对应元素第一次在链表中出现的下标位置。
+
+```java
+// 查找元素的下标位置
+public int indexOf(Object o) {
+    // 初始值为0，没遍历一次，加1。
+    int index = 0;
+    // 如果查找的元素是null，那么就返回元素为null的下标
+    // 如果查找的元素不为null，那么就遍历链表，直到找到该元素
+    // 如果没有找到该元素，那么就返回-1。
+    if (o == null) {
+        for (Node<E> x = first; x != null; x = x.next) {
+            if (x.item == null)
+                return index;
+            index++;
+        }
+    } else {
+        for (Node<E> x = first; x != null; x = x.next) {
+            if (o.equals(x.item))
+                return index;
+            index++;
+        }
+    }
+    return -1;
+}
+```
+### lastIndexOf(Object o)方法
+该方法用于查找对应元素最后一次在链表中出现的下标位置。这个方法与indexOf方法的区别在于，lastIndexOf是从后往前遍历，而indexOf是从前往后遍历。
+
+```java
+// 该方法用于查找对应元素最后一次在链表中出现的下标位置
+public int lastIndexOf(Object o) {
+    // 获取链表的size
+    // 然后从后往前遍历链表，直到找到该元素，并返回下标位置
+    int index = size;
+    if (o == null) {
+        for (Node<E> x = last; x != null; x = x.prev) {
+            index--;
+            if (x.item == null)
+                return index;
+        }
+    } else {
+        for (Node<E> x = last; x != null; x = x.prev) {
+            index--;
+            if (o.equals(x.item))
+                return index;
+        }
+    }
+    return -1;
+}
+```
+### offer(E e)方法
+该方法用于在链表末尾添加一个元素。
+
+```java
+
+public boolean offer(E e) {
+    return add(e);
+}
+
+public boolean add(E e) {
+    linkLast(e);
+    return true;
+}
+
+void linkLast(E e) {
+    // 这里获取最后一个节点
+    final Node<E> l = last;
+    // 创建一个新的节点，并更新节点的前一个节点和后一个节点
+    final Node<E> newNode = new Node<>(l, e, null);
+    last = newNode;
+    if (l == null)
+        first = newNode;
+    else
+        l.next = newNode;
+    size++;
+    modCount++;
+}
+```
+### offerFirst(E e)和offerLast(E e)方法
+这两个方法是在链表的最前面和最后面添加元素。
+### peek方法
+该方法获取链表的第一个元素，和前面的element方法类似。
+
+```java
+public E peek() {
+    // 获取第一个元素，如果为链表为空，那么就返回null
+    final Node<E> f = first;
+    return (f == null) ? null : f.item;
+}
+```
+### peekFirst和peekLast方法
+该方法返回链表的第一个元素和最后一个元素，如果是空链表，那么返回null。
+### poll方法
+该方法表示删除链表的第一个元素，并返回删除的元素。
+
+```java
+public E poll() {
+    // 获取链表中的第一个元素
+    final Node<E> f = first;
+    return (f == null) ? null : unlinkFirst(f);
+}
+
+private E unlinkFirst(Node<E> f) {
+    // assert f == first && f != null;
+    // 获取链表中的第一个元素
+    final E element = f.item;
+    // 获取当前元素的下一个元素
+    final Node<E> next = f.next;
+    // 删除当前元素
+    f.item = null;
+    f.next = null; // help GC
+    // 更新链表的第一个元素，即将当前元素的下一个元素更新为第一个元素
+    first = next;
+    // 如果链表的元素大于1个，那么就将更新后的第一个元素的前一个元素设置为null
+    // 如果链表的元素只有1个，那么当删除掉第一个元素时，first和last都为null
+    if (next == null)
+        last = null;
+    else
+        next.prev = null;
+    // 更新size
+    size--;
+    modCount++;
+    return element;
+}
+```
+### pollFirst方法和pollLast方法
+删除链表的第一个元素和最后一个元素，如果是空链表，那么返回null，并返回删除的元素。
+### pop方法
+该方法和poll方法类似。
+### push方法
+该方法与addFirst方法类似。
+### remove方法
+- remove()方法，删除链表的第一个元素
+- remove(int index)方法，删除链表中指定index的元素
+- remove(Object o)方法，删除链表中第一次出现的o元素。
+- removeFirst()方法，删除链表中的第一个元素。
+- removeLast()方法，删除链表中的最后一个元素。
+- removeFirstOccurrence(Object o)方法，删除链表中第一次出现的o元素。（从前往后遍历）
+- removeLastOccurrence(Object o)方法，删除链表中最后一次出现的o元素。（从后往前遍历）
