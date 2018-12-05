@@ -431,3 +431,181 @@ private E unlinkFirst(Node<E> f) {
 - removeLast()方法，删除链表中的最后一个元素。
 - removeFirstOccurrence(Object o)方法，删除链表中第一次出现的o元素。（从前往后遍历）
 - removeLastOccurrence(Object o)方法，删除链表中最后一次出现的o元素。（从后往前遍历）
+### set(int index , E e)方法
+该方法用于将index对应的元素设置为新值e，并返回旧值。
+
+```java
+public E set(int index, E element) {
+    // 检查角标是否越界
+    checkElementIndex(index);
+    // 获取index对应的元素
+    Node<E> x = node(index);
+    // 更新元素，并返回旧值
+    E oldVal = x.item;
+    x.item = element;
+    return oldVal;
+}
+```
+### size方法
+获取链表的大小。
+### iterator方法
+该方法返回一个iterator对象，用于集合迭代。这个方法是所有集合都有的一个方法。
+
+```java
+public Iterator<E> iterator() {
+    return listIterator();
+}
+
+public ListIterator<E> listIterator() {
+    return listIterator(0);
+}
+
+public ListIterator<E> listIterator(final int index) {
+    // 检查是否角标越界
+    rangeCheckForAdd(index);
+    // 创建一个ListItr实例
+    // ListItr类继承了Itr类并实现了ListIterator接口
+    return new ListItr(index);
+}
+
+// Itr内部类实现了Iterator接口
+private class Itr implements Iterator<E> {
+    // 定义一个光标索引，每次调用next方法就加1
+    int cursor = 0;
+
+    // 调用next方法或者previous方法返回对应元素的索引
+    // 如果调用remove方法，那么会重新设置这个值为-1
+    // 其实这个表示的就是最近一次调用next或previous方法返回的元素的索引下标，如果是调用remove就重新设置为-1
+    int lastRet = -1;
+
+     // 如果这两个值不相等，那么表示该集合正在进行并发修改操作
+    int expectedModCount = modCount;
+    
+    // 调用hasNext方法来判断是否还有下一个元素
+    // 通过光标索引与集合的size来判断，如果不等于就返回true，如果等于，就返回false，表示集合已经没有下一个元素了
+    public boolean hasNext() {
+        return cursor != size();
+    }
+    
+    // 获取集合的下一个元素
+    public E next() {
+        // 检查是否在进行并发修改操作
+        checkForComodification();
+        // 这里需要使用try/catch来捕获异常，是因为集合的角标越界属性运行时异常，在编译的时候是检查不出来，只有运行时才知道，所以需要用try/catch来捕获
+        try {
+            // 调用链表的get方法，来获取下标位置对应的元素
+            // 光标加1，返回该元素
+            int i = cursor;
+            E next = get(i);
+            lastRet = i;
+            cursor = i + 1;
+            return next;
+        } catch (IndexOutOfBoundsException e) {
+            checkForComodification();
+            throw new NoSuchElementException();
+        }
+    }
+
+    public void remove() {
+        if (lastRet < 0)
+            throw new IllegalStateException();
+        checkForComodification();
+        
+        // 调用集合的remove方法来删除元素
+        // 光标减1，并重设lastRet为-1
+        try {
+            AbstractList.this.remove(lastRet);
+            if (lastRet < cursor)
+                cursor--;
+            lastRet = -1;
+            expectedModCount = modCount;
+        } catch (IndexOutOfBoundsException e) {
+            throw new ConcurrentModificationException();
+        }
+    }
+    //如果modCount和expectedModCount不相等，那么表示当前集合在进行并发操作，因为在单线程中，这两个值一定是相等的
+    // 如果不相等就抛出异常
+    final void checkForComodification() {
+        if (modCount != expectedModCount)
+            throw new ConcurrentModificationException();
+    }
+}
+
+private class ListItr extends Itr implements ListIterator<E> {
+    // 初始化光标位置
+    ListItr(int index) {
+        cursor = index;
+    }
+    // 判断是否有上一个元素
+    // 如果cursor不等于0，那么表示有上一个元素
+    public boolean hasPrevious() {
+        return cursor != 0;
+    }
+    
+    // 这里的实现和next类似，获取集合的上一个元素，光标减1，并设置lastRet
+    public E previous() {
+        checkForComodification();
+        try {
+            int i = cursor - 1;
+            E previous = get(i);
+            lastRet = cursor = i;
+            return previous;
+        } catch (IndexOutOfBoundsException e) {
+            checkForComodification();
+            throw new NoSuchElementException();
+        }
+    }
+    
+    // 获取下一个元素的索引
+    public int nextIndex() {
+        return cursor;
+    }
+    
+    // 获取上一个元素的索引
+    public int previousIndex() {
+        return cursor-1;
+    }
+    
+    public void set(E e) {
+        // 这里必须要在调用next方法或者previous方法之后再调用set方法来能执行，不然会抛出异常
+        if (lastRet < 0)
+            throw new IllegalStateException();
+        checkForComodification();
+        // 通过调用set方法来设置
+        try {
+            AbstractList.this.set(lastRet, e);
+            expectedModCount = modCount;
+        } catch (IndexOutOfBoundsException ex) {
+            throw new ConcurrentModificationException();
+        }
+    }
+    // 添加元素到链表的第一个位置上。
+    public void add(E e) {
+        checkForComodification();
+
+        try {
+            int i = cursor;
+            AbstractList.this.add(i, e);
+            lastRet = -1;
+            cursor = i + 1;
+            expectedModCount = modCount;
+        } catch (IndexOutOfBoundsException ex) {
+            throw new ConcurrentModificationException();
+        }
+    }
+}
+```
+### toArray方法
+该方法将链表转为数组。
+
+```java
+public Object[] toArray() {
+    // 创建一个size大小的数组
+    Object[] result = new Object[size];
+    int i = 0;
+    // 将链表中的元素添加到数组中，并返回数组
+    for (Node<E> x = first; x != null; x = x.next)
+        result[i++] = x.item;
+    return result;
+}
+```
